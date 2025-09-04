@@ -1,12 +1,22 @@
-import type { Request, Response, NextFunction } from "express";
-import { db } from "../lib/db.js";
+import { Router } from "express";
 
-export async function requireAuth(req:Request,res:Response,next:NextFunction){
-  const auth = req.headers.authorization;
-  if(!auth) return res.status(401).json({error:"No token"});
-  const token = auth.split(" ")[1];
-  const { data, error } = await db.auth.getUser(token);
-  if(error || !data) return res.status(401).json({error:"Invalid token"});
-  (req as any).user = data.user;
-  next();
-}
+const router = Router();
+
+// User login
+router.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  res.json({ message: "User logged in", email });
+});
+
+// User register
+router.post("/register", (req, res) => {
+  const { name, email, password } = req.body;
+  res.json({ message: "User registered", name, email });
+});
+
+// User logout
+router.post("/logout", (req, res) => {
+  res.json({ message: "User logged out" });
+});
+
+export default router;
