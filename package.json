@@ -1,5 +1,5 @@
 {
-  "name": "tsa-api",
+  "name": "tree-service-app",
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "typescript": "^5.3.3",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "@types/express": "^4.17.21"
   }
 }
