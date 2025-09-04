@@ -1,14 +1,30 @@
 import { Router } from "express";
-import { db } from "../lib/db.js";
-const r = Router();
 
-r.get("/", async (req,res)=>{
-  const date = String(req.query.date||"");
-  let q = db.from("schedule").select("*");
-  if(date) q = q.eq("date", date);
-  const { data, error } = await q;
-  if(error) return res.status(500).json({error:error.message});
-  res.json(data);
+const router = Router();
+
+// Get full schedule
+router.get("/", (req, res) => {
+  res.json({ message: "Schedule list" });
 });
 
-export default r;
+// Get schedule for specific job
+router.get("/:id", (req, res) => {
+  res.json({ message: `Schedule for job ID ${req.params.id}` });
+});
+
+// Add schedule entry
+router.post("/", (req, res) => {
+  res.json({ message: "Schedule entry created", schedule: req.body });
+});
+
+// Update schedule
+router.put("/:id", (req, res) => {
+  res.json({ message: `Schedule entry ${req.params.id} updated`, data: req.body });
+});
+
+// Delete schedule entry
+router.delete("/:id", (req, res) => {
+  res.json({ message: `Schedule entry ${req.params.id} deleted` });
+});
+
+export default router;
