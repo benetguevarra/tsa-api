@@ -1,22 +1,30 @@
 import { Router } from "express";
-import { db } from "../lib/db.js";
-const r = Router();
 
-r.get("/", async (req,res)=>{
-  const q = String(req.query.q||"").toLowerCase();
-  const status = String(req.query.status||"");
-  let { data, error } = await db.from("jobs").select("*, clients(name)").order("created_at",{ascending:false});
-  if(error) return res.status(500).json({error:error.message});
-  let rows = data || [];
-  if (q) rows = rows.filter((j:any)=>JSON.stringify(j).toLowerCase().includes(q));
-  if (status && status!=="All") rows = rows.filter((j:any)=>j.status===status);
-  res.json(rows);
+const router = Router();
+
+// Get all jobs
+router.get("/", (req, res) => {
+  res.json({ message: "List of all jobs" });
 });
 
-r.get("/:id", async (req,res)=>{
-  const { data, error } = await db.from("jobs").select("*").eq("id", req.params.id).single();
-  if(error) return res.status(500).json({error:error.message});
-  res.json(data);
+// Get one job
+router.get("/:id", (req, res) => {
+  res.json({ message: `Job with ID ${req.params.id}` });
 });
 
-export default r;
+// Create new job
+router.post("/", (req, res) => {
+  res.json({ message: "Job created", job: req.body });
+});
+
+// Update job
+router.put("/:id", (req, res) => {
+  res.json({ message: `Job ${req.params.id} updated`, data: req.body });
+});
+
+// Delete job
+router.delete("/:id", (req, res) => {
+  res.json({ message: `Job ${req.params.id} deleted` });
+});
+
+export default router;
