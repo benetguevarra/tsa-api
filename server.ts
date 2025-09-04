@@ -1,22 +1,22 @@
-import "dotenv/config";
 import express from "express";
-import cors from "cors";
-
-import clients from "./routes/clients.js";
-import jobs from "./routes/jobs.js";
-import quotes from "./routes/quotes.js";
-import schedule from "./routes/schedule.js";
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+
+// Middleware to parse JSON
 app.use(express.json());
 
-app.get("/health", (_,res)=>res.json({ok:true}));
+// Example route
+app.get("/", (req, res) => {
+  res.send("TSA API is running 🚀");
+});
 
-app.use("/clients", clients);
-app.use("/jobs", jobs);
-app.use("/quotes", quotes);
-app.use("/schedule", schedule);
+// Example route for testing
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is healthy ✅" });
+});
 
-const port = process.env.PORT || 4000;
-app.listen(port, ()=>console.log(`API on :${port}`));
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
